@@ -1,9 +1,12 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SistemaVendas.DAL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +27,12 @@ namespace SistemaVendas
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            //se necesário for, colocar a linha de código do sql que o junio mostrou
+            services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseSqlServer("Server=.;Database=Estoque;Trusted_Connection=True;MultipleActiveResultSets=true"));
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

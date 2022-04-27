@@ -26,7 +26,7 @@ namespace SistemaVendas.Controllers
         }
 
         [HttpGet]
-        public IActionResult Cliente(int? id)
+        public IActionResult Cadastro(int? id)
         {
             ClienteViewModel viewModel = new ClienteViewModel();
 
@@ -44,7 +44,7 @@ namespace SistemaVendas.Controllers
         }
 
         [HttpPost]
-        public IActionResult Cliente(ClienteViewModel clienteViewModel)
+        public IActionResult Cadastro(ClienteViewModel clienteViewModel)
         {
             if (ModelState.IsValid)
             {

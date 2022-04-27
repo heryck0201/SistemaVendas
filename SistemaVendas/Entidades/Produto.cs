@@ -11,7 +11,7 @@ namespace SistemaVendas.Entidades
     {
         [Key]
         public int? Codigo { get; set; }
-        public string Descricaao { get; set; }
+        public string Descricao { get; set; }
         public double Quantidade { get; set; }
         public decimal Valor { get; set; }
 

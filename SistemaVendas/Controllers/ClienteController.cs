@@ -10,60 +10,66 @@ using System.Threading.Tasks;
 
 namespace SistemaVendas.Controllers
 {
-    public class CategoriaController : Controller
+    public class ClienteController : Controller
     {
         protected ApplicationDbContext _applicationDbContext;
-        public CategoriaController(ApplicationDbContext applicationDbContext)
+        public ClienteController(ApplicationDbContext applicationDbContext)
         {
             _applicationDbContext = applicationDbContext;
         }
         public IActionResult Index()
         {
-            IEnumerable<Categoria> lista = _applicationDbContext.Categoria.ToList();
+            IEnumerable<Cliente> lista = _applicationDbContext.Cliente.ToList();
             //dispose é para liberar memória
             _applicationDbContext.Dispose();
             return View(lista);
         }
 
         [HttpGet]
-        public IActionResult Cadastro(int? id)
+        public IActionResult Cliente(int? id)
         {
-            CategoriaViewModel viewModel = new CategoriaViewModel();
+            ClienteViewModel viewModel = new ClienteViewModel();
 
             if (id != null)
             {
-                var entidade = _applicationDbContext.Categoria.Where(x => x.Codigo == id).FirstOrDefault();
+                var entidade = _applicationDbContext.Cliente.Where(x => x.Codigo == id).FirstOrDefault();
                 viewModel.Codigo = entidade.Codigo;
-                viewModel.Descricao = entidade.Descricao;
+                viewModel.Nome = entidade.Nome;
+                viewModel.CNPJ_CPF = entidade.CNPJ_CPF;
+                viewModel.Email = entidade.Email;
+                viewModel.Celular = entidade.Celular;
             }
 
             return View(viewModel);
         }
 
         [HttpPost]
-        public IActionResult Cadastro(CategoriaViewModel categoriaViewModel)
+        public IActionResult Cliente(ClienteViewModel clienteViewModel)
         {
             if (ModelState.IsValid)
             {
-                Categoria objCategoria = new Categoria()
+                Cliente objCliente = new Cliente()
                 {
-                    Codigo = categoriaViewModel.Codigo ,
-                    Descricao = categoriaViewModel.Descricao
+                    Codigo = clienteViewModel.Codigo,
+                    Nome = clienteViewModel.Nome,
+                    CNPJ_CPF = clienteViewModel.CNPJ_CPF,
+                    Email = clienteViewModel.Email,
+                    Celular = clienteViewModel.Celular,
                 };
-                if (categoriaViewModel.Codigo == null)
+                if (clienteViewModel.Codigo == null)
                 {
-                    _applicationDbContext.Categoria.Add(objCategoria);
+                    _applicationDbContext.Cliente.Add(objCliente);
                 }
                 else
                 {
-                    _applicationDbContext.Entry(objCategoria).State = EntityState.Modified;
+                    _applicationDbContext.Entry(objCliente).State = EntityState.Modified;
                 }
                 _applicationDbContext.SaveChanges();
             }
 
             else
             {
-                return View(categoriaViewModel);
+                return View(clienteViewModel);
             }
             return Redirect("Index");
         }
@@ -71,10 +77,10 @@ namespace SistemaVendas.Controllers
         [HttpGet]
         public IActionResult Excluir(int id)
         {
-            var ent = new Categoria()
+            var ent = new Cliente()
             {
                 Codigo = id
-            }; 
+            };
             _applicationDbContext.Attach(ent);
             _applicationDbContext.Remove(ent);
             _applicationDbContext.SaveChanges();

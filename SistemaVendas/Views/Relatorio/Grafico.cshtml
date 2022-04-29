@@ -1,1 +1,29 @@
-﻿
+﻿@{ 
+    ViewData["Title"] = "Gráfico";
+}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.esm.js"></script>
+<h2>Total de Vendas por Produtos</h2>
+<hr />
+<canvas id="myChart"></canvas>
+
+<script>
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var chart = new Chart(ctx, {
+        //the type of chat we want to create
+        type: 'pie',
+
+        //the data for our dataset
+        data: {
+            labels: [@Html.Raw(ViewBag.Labels)],
+            datasets: [{
+                /*label: 'My First dataset',*/
+                backgroundColor: [@Html.Raw(ViewBag.Cores)],
+                borderColor: '#fff',
+                data: [@Html.Raw(ViewBag.Valores)]
+            }]
+        },
+        //Configuration options go here
+        options: {}
+    })
+</script>

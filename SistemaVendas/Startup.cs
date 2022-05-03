@@ -28,10 +28,9 @@ namespace SistemaVendas
         {
             services.AddControllersWithViews();
             //se necesário for, colocar a linha de código do sql que o junio mostrou
-            services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer("Server=.;Database=Estoque;Trusted_Connection=True;MultipleActiveResultSets=true"));
-
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddDbContext<ApplicationDbContext>(o => o.UseSqlServer(Configuration.GetConnectionString("DataBase")));
+            services.AddHttpContextAccessor();
+            //services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSession();
         }
 
@@ -59,7 +58,7 @@ namespace SistemaVendas
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Login}/{action=Index}/{id?}");
             });
         }
     }

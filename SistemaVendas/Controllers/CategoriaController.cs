@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Aplicacao.Servico.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SistemaVendas.DAL;
 using SistemaVendas.Entidades;
@@ -12,72 +13,47 @@ namespace SistemaVendas.Controllers
 {
     public class CategoriaController : Controller
     {
-        protected ApplicationDbContext _applicationDbContext;
-        public CategoriaController(ApplicationDbContext applicationDbContext)
+        readonly IServicoAplicacaoCategoria ServicoAplicacaoCategoria;
+        public CategoriaController(IServicoAplicacaoCategoria servicoAplicacaoCategoria)
         {
-            _applicationDbContext = applicationDbContext;
+            ServicoAplicacaoCategoria = servicoAplicacaoCategoria;
         }
         public IActionResult Index()
         {
-            IEnumerable<Categoria> lista = _applicationDbContext.Categoria.ToList();
-            //dispose é para liberar memória
-            _applicationDbContext.Dispose();
-            return View(lista);
+
+            return View(ServicoAplicacaoCategoria.Listagem());
         }
 
         [HttpGet]
         public IActionResult Cadastro(int? id)
         {
             CategoriaViewModel viewModel = new CategoriaViewModel();
-
             if (id != null)
             {
-                var entidade = _applicationDbContext.Categoria.Where(x => x.Codigo == id).FirstOrDefault();
-                viewModel.Codigo = entidade.Codigo;
-                viewModel.Descricao = entidade.Descricao;
+                viewModel = ServicoAplicacaoCategoria.CarregarRegistro((int)id);
             }
-
             return View(viewModel);
         }
 
         [HttpPost]
-        public IActionResult Cadastro(CategoriaViewModel categoriaViewModel)
+        public IActionResult Cadastro(CategoriaViewModel entidade)
         {
             if (ModelState.IsValid)
             {
-                Categoria objCategoria = new Categoria()
-                {
-                    Codigo = categoriaViewModel.Codigo ,
-                    Descricao = categoriaViewModel.Descricao
-                };
-                if (categoriaViewModel.Codigo == null)
-                {
-                    _applicationDbContext.Categoria.Add(objCategoria);
-                }
-                else
-                {
-                    _applicationDbContext.Entry(objCategoria).State = EntityState.Modified;
-                }
-                _applicationDbContext.SaveChanges();
+                ServicoAplicacaoCategoria.Cadastrar(entidade);
             }
 
             else
             {
-                return View(categoriaViewModel);
+                return View(entidade);
             }
-            return Redirect("Index");
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
         public IActionResult Excluir(int id)
         {
-            var ent = new Categoria()
-            {
-                Codigo = id
-            }; 
-            _applicationDbContext.Attach(ent);
-            _applicationDbContext.Remove(ent);
-            _applicationDbContext.SaveChanges();
+            ServicoAplicacaoCategoria.Excluir(id);
             return RedirectToAction("Index");
         }
     }

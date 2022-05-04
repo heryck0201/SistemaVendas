@@ -1,3 +1,7 @@
+using Aplicacao.Servico.Interfaces;
+using Dominio.Interfaces;
+using Dominio.Repositorio;
+using Dominio.Servivos.Categorias;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -6,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Repositorio.Entidades;
 using SistemaVendas.DAL;
 using System;
 using System.Collections.Generic;
@@ -27,11 +32,27 @@ namespace SistemaVendas
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            //se necesário for, colocar a linha de código do sql que o junio mostrou
+
+            /*fica por enquannto pois n esta no padrão DDD
+             */
             services.AddDbContext<ApplicationDbContext>(o => o.UseSqlServer(Configuration.GetConnectionString("DataBase")));
             services.AddHttpContextAccessor();
+
+            //a principio sera definitivo
+            services.AddDbContext<Repositorio.Contexto.ApplicationDbContext>(o => o.UseSqlServer(Configuration.GetConnectionString("DataBase")));
+            services.AddHttpContextAccessor();
+
             //services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSession();
+
+            //serviço aplicação
+            services.AddScoped<IServicoAplicacaoCategoria, ServicoAplicacaoCategoria>();
+
+            //Dominio
+            services.AddScoped<IServicoCategoria, ServicoCategoria>();
+
+            //Repositório
+            services.AddScoped<IRepositorioCategoria, RepositorioCategoria>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

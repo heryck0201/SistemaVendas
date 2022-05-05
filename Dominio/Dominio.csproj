@@ -8,7 +8,6 @@
     <Folder Include="Servivos\Produtos\" />
     <Folder Include="Servivos\Usuarios\" />
     <Folder Include="Servivos\Vendas\" />
-    <Folder Include="Servivos\Clientes\" />
   </ItemGroup>
 
 </Project>

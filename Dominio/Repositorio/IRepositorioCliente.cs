@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dominio.Interfaces
+namespace Dominio.Repositorio
 {
-  public interface IServicoCategoria : IServicoCRUD<Categoria>
+   public interface IRepositorioCliente : IRepositorio<Cliente>
     {
     }
 }

@@ -47,12 +47,15 @@ namespace SistemaVendas
 
             //serviço aplicação
             services.AddScoped<IServicoAplicacaoCategoria, ServicoAplicacaoCategoria>();
+            services.AddScoped<IServicoAplicacaoCliente, ServicoAplicacaoCliente>();
 
             //Dominio
             services.AddScoped<IServicoCategoria, ServicoCategoria>();
+            services.AddScoped<IServicoCliente, ServicoCliente>();
 
             //Repositório
             services.AddScoped<IRepositorioCategoria, RepositorioCategoria>();
+            services.AddScoped<IRepositorioCliente, RepositorioCliente>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
